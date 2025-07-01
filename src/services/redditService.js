@@ -5,7 +5,7 @@ axios.defaults.headers.common['Content-Type'] = 'Application/json';
 
 export async function getRedditPosts() {
   try {
-    const response = await axios.get('r/programacion.json');
+    const response = await axios.get('r/popular.json');
     return response.data;
   } catch (error) {
     return error.data;
