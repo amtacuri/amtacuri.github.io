@@ -18,10 +18,9 @@ export default {
             scrubber_media_url: ''
           }
         },
-        is_video: false
+        is_video: false,
+        videoHtml: ''
       },
-      videoAnterior: null,
-      loading: false
     }
   },
   methods: {
@@ -56,13 +55,17 @@ export default {
     },
     loadVideo(media) {
       console.log(media);
-      if (media === null) {
-        this.dataPost.is_video = false;
-        return
+      if (media !== null) {
+        const versionedUrl = `${media.reddit_video.scrubber_media_url}?v=${Date.now()}`
+        this.videoHtml  = `
+          <video width="100%" height="auto" controls>
+            <source src="${versionedUrl}" type="video/mp4">
+          </video>
+        `
+      } else {
+        this.videoHtml = ''
       }
-      
-      // this.videoAnterior = media.reddit_video.scrubber_media_url;
-    }
+    } 
   },
   mounted() {
     console.log('detail:', (this.dataPost) ? this.dataPost : 'null')
@@ -78,7 +81,6 @@ export default {
         // console.log(this.dataPost.media.reddit_video.scrubber_media_url)
       // }, 1000)
       console.log('dataPost: ', this.dataPost);
-      this.loading = true;
       this.loadVideo(this.dataPost.media);
     },
     id: (newId)=>{
@@ -105,12 +107,13 @@ export default {
 
 
       <div class="text-center">
-        <div v-if="dataPost.is_video" class="text-center">
+        <div id="video-container" v-html="videoHtml"></div>
+        <!-- <div v-if="dataPost.is_video" class="text-center">
 +        <video width="100%" height="auto" controls>
 +          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url" type="video/mp4">
 +          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url">
 +        </video>
-+      </div>
++      </div> -->
       </div>
 
       <div v-if="dataPost.url && dataPost !== ''" class="mt-2 pt-2 border-bottom pb-2">
