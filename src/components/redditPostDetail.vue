@@ -101,6 +101,11 @@ export default {
         </div>
         
       </div>
+      <div>
+        <textarea name="" id="" cols="30" rows="10"></textarea>
+        <button>Cancelar</button>
+        <button>Comentar</button>
+      </div>
     </div>
   </div>
 </template>
