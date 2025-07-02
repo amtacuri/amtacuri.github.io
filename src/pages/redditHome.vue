@@ -14,7 +14,8 @@ export default {
       previousPage: false,
       currentPage: 1,
       postData: {},
-      postId:''
+      postId:'',
+      loading: false,
     }
   },
   mounted() {
@@ -65,9 +66,13 @@ export default {
     },
     getDetailRedditPost(post) {
       console.log('detail home', this.dataRedditPosts)
-      this.postData = this.dataRedditPosts.find((item) => item.data.id==post);
+      // setTimeout(()=> {
+        this.postData = this.dataRedditPosts.find((item) => item.data.id==post);
+        this.loading = true;
+      // },1000)
       console.log('pd', this.postData)
       this.postId = post;
+      window.scrollTo(0,0);
     }
   }
 }
@@ -88,6 +93,7 @@ export default {
     </div>
     <div class="row">
       <div class="col-5">
+        
         <RedditPost 
           v-for="redditPost, ind in dataRedditPosts" 
           :key="redditPost.data.id"
@@ -97,6 +103,9 @@ export default {
           ></RedditPost>
       </div>
       <div class="col-7">
+        <!-- <div class="text-center" v-show="!loading">
+          <p>Loading...</p>
+        </div> -->
         <RedditPostDetail :postDetail="postData" :id="postId"></RedditPostDetail>
       </div>
     </div>

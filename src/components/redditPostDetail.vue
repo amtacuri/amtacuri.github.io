@@ -19,7 +19,9 @@ export default {
           }
         },
         is_video: false
-      }
+      },
+      videoAnterior: null,
+      loading: false
     }
   },
   methods: {
@@ -51,6 +53,15 @@ export default {
       }
 
       return `Hace ${timeString}`;
+    },
+    loadVideo(media) {
+      console.log(media);
+      if (media === null) {
+        this.dataPost.is_video = false;
+        return
+      }
+      
+      // this.videoAnterior = media.reddit_video.scrubber_media_url;
     }
   },
   mounted() {
@@ -59,9 +70,16 @@ export default {
   },
   watch: {
     postDetail: function(newValue) {
-      console.log('watch', newValue.data)
-      this.dataPost = newValue.data;
+      
+      console.log('watch', newValue.data);
+      // setTimeout(()=>{
+        // this.dataPost.media = null
+        this.dataPost = newValue.data;
+        // console.log(this.dataPost.media.reddit_video.scrubber_media_url)
+      // }, 1000)
       console.log('dataPost: ', this.dataPost);
+      this.loading = true;
+      this.loadVideo(this.dataPost.media);
     },
     id: (newId)=>{
       console.log('newId', newId)
@@ -82,13 +100,20 @@ export default {
     <div class="card-body">
       <p class="fw-bold">{{ (this.dataPost) ? this.dataPost.title : '' }}</p>
       <div>{{ (this.dataPost.selftext_html && this.dataPost.selftext_html == '') ? this.dataPost.selftext_html : this.dataPost.selftext }}</div>
-      <div v-if="dataPost.is_video" class="text-center">
-        <video width="100%" height="auto" controls>
-          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url" type="video/mp4">
-          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url">
-        </video>
+      
+      <!-- <p>{{ 'tiene video: ' + dataPost.is_video +' | '+ dataPost.media }}</p> -->
+
+
+      <div class="text-center">
+        <div v-if="dataPost.is_video" class="text-center">
++        <video width="100%" height="auto" controls>
++          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url" type="video/mp4">
++          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url">
++        </video>
++      </div>
       </div>
-      <div v-if="dataPost.url && dataPost !== ''" class="pt-5">
+
+      <div v-if="dataPost.url && dataPost !== ''" class="mt-2 pt-2 border-bottom pb-2">
         <div class="d-flex justify-content-between">
           <p class="mb-0">
             <a :href="dataPost.url" class="text-black link-underline-light">
@@ -101,10 +126,22 @@ export default {
         </div>
         
       </div>
-      <div>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
-        <button>Cancelar</button>
-        <button>Comentar</button>
+      <div class="mt-5">
+        <form action="" class="gy-2">
+          <div class="row">
+            <div class="col">
+              <textarea name="" id="" cols="30" rows="10" class="form-control" placeholder="Agregar Comentario"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col pt-2">
+              <button type="button" class="btn btn-secondary me-2">Cancelar</button>
+              <button type="button" class="btn btn-primary">Comentar</button>
+            </div>
+          </div>
+        </form>
+        
+        
       </div>
     </div>
   </div>

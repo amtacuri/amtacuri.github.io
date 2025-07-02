@@ -35,7 +35,7 @@ export default {
 }
 </script>
 <template>
-  <div class="card mb-3">
+  <div class="card mb-3 focus-ring">
     <div class="card-header">
       <div class="d-flex">
         <span class="p-2"><img src="https://www.redditstatic.com/avatars/defaults/v2/avatar_default_4.png" width="24" height="24" alt=""></span>
@@ -45,10 +45,10 @@ export default {
       </div>
     </div>
     <div class="card-body">
-      <h6 class="p-2">
-        <a v-bind:href="'https://reddit.com' + post.data.permalink" class="text-black link-underline-light">
-          {{ this.ind + '. ' + this.post.data.title }}
-        </a>
+      <h6 class="p-2 text-black">
+        <!-- <a v-bind:href="'https://reddit.com' + post.data.permalink" class="text-black link-underline-light"> -->
+          {{ this.post.data.title }}
+        <!-- </a> -->
       </h6>
       <div class="p-2 flex"> 
         <span>
