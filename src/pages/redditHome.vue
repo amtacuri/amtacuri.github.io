@@ -12,65 +12,40 @@ export default {
       before: [],
       after: null,
       previousPage: false,
-      currentPage: 1,
+      currentPage: 0,
       postData: {},
       postId:'',
-      loading: false,
     }
   },
   mounted() {
-    this.getPostList()
+    this.getAfterPostList()
   },
   methods: {
-    async getPostList() {
-      await getRedditPosts()
-      
+    async getPostList(param1, param2) {
+      await getRedditPosts(param1, param2)
       .then((res)=>{
-        // console.log('data: ', res.data)
         this.after = res.data.after;
         this.dataRedditPosts = res.data.children;
       })
-      this.before.push(this.after)
-      this.previousPage = this.before.length > 1;
     },
-    async getAfterPostList() {
+    getAfterPostList() {
       this.before.push(this.after)
       this.currentPage++;
-
-      await getRedditPosts(this.after, 'after')
-      .then((res) => {
-        console.log('data after >>', res.data)
-        this.after = res.data.after;
-        this.dataRedditPosts = res.data.children;
-      })
+      this.getPostList(this.after, 'after')
       this.previousPage = this.before.length > 1;
-      
-      console.log('>> after:', this.after)
-      console.log('<< before:', this.before)
-      console.log('previousPage: ', this.previousPage)
     },
-    async getBeforePostList() {
+
+    getBeforePostList() {
       if (this.before.length < 2) return
       this.before.pop();
-      const prevCursor = this.previousPage[this.previousPage.length -1]
+      const prevCursor = this.before[this.before.length -1]
       this.currentPage--;
-      await getRedditPosts(prevCursor, 'after')
-      .then((res) => {
-        console.log('data before <<', res.data)
-        this.after = this.after;
-        this.dataRedditPosts = res.data.children;
-      })
+      this.getPostList(prevCursor, 'after')
       this.previousPage = this.before.length > 1;
-      console.log('>> after1:', this.after)
-      console.log('<< before1:', this.before)
     },
+
     getDetailRedditPost(post) {
-      console.log('detail home', this.dataRedditPosts)
-      // setTimeout(()=> {
-        this.postData = this.dataRedditPosts.find((item) => item.data.id==post);
-        this.loading = true;
-      // },1000)
-      console.log('pd', this.postData)
+      this.postData = this.dataRedditPosts.find((item) => item.data.id==post); 
       this.postId = post;
       window.scrollTo(0,0);
     }
@@ -103,9 +78,6 @@ export default {
           ></RedditPost>
       </div>
       <div class="col-7">
-        <!-- <div class="text-center" v-show="!loading">
-          <p>Loading...</p>
-        </div> -->
         <RedditPostDetail :postDetail="postData" :id="postId"></RedditPostDetail>
       </div>
     </div>

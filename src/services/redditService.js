@@ -8,7 +8,6 @@ export async function getRedditPosts(cursor = null, direction = 'after') {
     limit: 10
   }
   if (cursor) params[direction] = cursor
-  console.log(params)
   try {
     const response = await axios.get('r/popular.json', {params});
     return response.data;

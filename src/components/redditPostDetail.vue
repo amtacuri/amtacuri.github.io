@@ -24,37 +24,7 @@ export default {
     }
   },
   methods: {
-    formatDate(milliseconds) {
-      const totalSeconds = Math.floor(milliseconds / 1000);
-      // console.log('totalSeconds: ', totalSeconds)
-
-      const hours = Math.floor(totalSeconds / 3600);
-      // console.log('hours: ', hours)
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-      const days =  Math.floor(hours / 24)
-      let timeString = '';
-      if (days > 0) {
-        timeString += `${days} dia`;
-        timeString += (days > 1) ? 's' : '';
-      } else {
-        if (hours > 0) {
-          timeString += `${hours} horas `;
-        } else {
-          if (minutes > 0) {
-            timeString += `${minutes} minutos `;
-          } else {
-            if (seconds > 0) {
-              timeString += `${seconds} segundos `;
-            }
-          }
-        }
-      }
-
-      return `Hace ${timeString}`;
-    },
     loadVideo(media) {
-      console.log(media);
       if (media !== null) {
         const versionedUrl = `${media.reddit_video.scrubber_media_url}?v=${Date.now()}`
         this.videoHtml  = `
@@ -68,24 +38,14 @@ export default {
     } 
   },
   mounted() {
-    console.log('detail:', (this.dataPost) ? this.dataPost : 'null')
-    console.log('id', this.id)
+
   },
   watch: {
     postDetail: function(newValue) {
+      this.dataPost = newValue.data;
       
-      console.log('watch', newValue.data);
-      // setTimeout(()=>{
-        // this.dataPost.media = null
-        this.dataPost = newValue.data;
-        // console.log(this.dataPost.media.reddit_video.scrubber_media_url)
-      // }, 1000)
-      console.log('dataPost: ', this.dataPost);
       this.loadVideo(this.dataPost.media);
     },
-    id: (newId)=>{
-      console.log('newId', newId)
-    }
   }
 }
 </script>
@@ -96,24 +56,14 @@ export default {
         <span class="p-2"><img src="https://www.redditstatic.com/avatars/defaults/v2/avatar_default_4.png" width="24" height="24" alt=""></span>
         <span class="pt-2">{{ this.dataPost.author }}</span>
         <span class="p-2">-</span>
-        <span class="pt-2">{{ this.formatDate(this.dataPost.created) }} </span>
+        <span class="pt-2">{{ $filters.toAgoTime(this.dataPost.created) }} </span>
       </div>
     </div>
     <div class="card-body">
       <p class="fw-bold">{{ (this.dataPost) ? this.dataPost.title : '' }}</p>
       <div>{{ (this.dataPost.selftext_html && this.dataPost.selftext_html == '') ? this.dataPost.selftext_html : this.dataPost.selftext }}</div>
-      
-      <!-- <p>{{ 'tiene video: ' + dataPost.is_video +' | '+ dataPost.media }}</p> -->
-
-
       <div class="text-center">
         <div id="video-container" v-html="videoHtml"></div>
-        <!-- <div v-if="dataPost.is_video" class="text-center">
-+        <video width="100%" height="auto" controls>
-+          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url" type="video/mp4">
-+          <source v-bind:src="dataPost.media.reddit_video.scrubber_media_url">
-+        </video>
-+      </div> -->
       </div>
 
       <div v-if="dataPost.url && dataPost !== ''" class="mt-2 pt-2 border-bottom pb-2">

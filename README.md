@@ -1,5 +1,24 @@
-# Vue 3 + Vite
+# Reddit client
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Cliente de reddit que muestra los post popular paginados de 10 en 10, usando un api gratuito.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Requisitos
+- node v.22.x.
+- npm 10.9.x.
+
+## Instalación
+1. Clonar el repositorio
+```bash
+git clone https://github.com/amtacuri/amtacuri.github.io.git
+cd amtacuri.github.io
+```
+
+2. Instalar dependencias
+```bash
+npm install
+```
+
+## Ejecucion en desarrollo
+```bash
+npm run dev
+```
