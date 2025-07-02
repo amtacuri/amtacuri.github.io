@@ -1,13 +1,13 @@
 <script>
 export default {
-  props: ['post'],
+  props: ['post', 'ind'],
   methods: {
     formatDate(milliseconds) {
       const totalSeconds = Math.floor(milliseconds / 1000);
-      console.log('totalSeconds: ', totalSeconds)
+      // console.log('totalSeconds: ', totalSeconds)
 
       const hours = Math.floor(totalSeconds / 3600);
-      console.log('hours: ', hours)
+      // console.log('hours: ', hours)
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
       const days =  Math.floor(hours / 24)
@@ -45,10 +45,22 @@ export default {
       </div>
     </div>
     <div class="card-body">
-      <h2 class="p-2">{{ this.post.data.title }}</h2>
-      <div class="p-2"> Comments: 
-        <i class="bi bi-chat-right-text"></i>
-        {{ this.post.data.num_comments }}</div>
+      <h6 class="p-2">
+        <a v-bind:href="'https://reddit.com' + post.data.permalink" class="text-black link-underline-light">
+          {{ this.ind + '. ' + this.post.data.title }}
+        </a>
+      </h6>
+      <div class="p-2 flex"> 
+        <span>
+          Comments: 
+          {{ this.post.data.num_comments }}
+        </span>
+        <span> | </span>
+        <span>
+          Leido:
+          {{ !this.post.data.clicked ? 'No' : 'Si' }}
+        </span>
+        </div>
     </div>
   </div>
 </template>
